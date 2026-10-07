@@ -1,0 +1,62 @@
+<%- include('partials/head', { title: title }) %>
+<p><a href="/articles">&larr; All articles</a></p>
+<% if (a.status !== 'published') { %>
+  <div class="flash">This article is <strong><%= a.status %></strong>. Only its author and admins can see it.<% if (a.status === 'rejected' && a.reject_reason) { %> Reason: <%= a.reject_reason %><% } %></div>
+<% } %>
+<article>
+  <h1 class="h-md"><%= a.title %></h1>
+  <p>
+    <span class="tag"><%= a.category || 'General' %></span>
+    <span class="tag">By <%= a.author %></span>
+    <span class="tag"><%= fmtDate(a.created_at) %></span>
+    <% if (a.type === 'original') { %><span class="tag"><%= Math.max(1, Math.round(a.body.split(/\s+/).length / 200)) %> min read</span><% } %>
+  </p>
+  <p class="lead"><%= a.summary %></p>
+  <% if (a.type === 'external') { %>
+    <div class="card wide">
+      <p><strong>Source:</strong> <%= a.source_name %></p>
+      <p class="muted">This links to an article on another website. The summary above is ours; the full text belongs to the original publisher.</p>
+      <a class="btn" href="<%= a.source_url %>" target="_blank" rel="noopener noreferrer">Read the original article</a>
+    </div>
+  <% } else { %>
+    <div class="prose"><%= a.body %></div>
+  <% } %>
+</article>
+
+<% if (a.status === 'published') { %>
+  <div class="actions">
+    <% if (user) { %>
+      <form class="inline-form" method="post" action="/articles/<%= a.id %>/bookmark">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <button class="btn ghost" type="submit"><%= bookmarked ? 'Remove bookmark' : 'Save to my dashboard' %></button>
+      </form>
+    <% } else { %>
+      <a href="/login">Log in</a> to save this article.
+    <% } %>
+  </div>
+
+  <h2 id="comments">Comments (<%= comments.length %>)</h2>
+  <% comments.forEach(function (c) { %>
+    <div class="comment">
+      <strong><%= c.name %></strong> <span class="muted"><%= fmtDate(c.created_at) %></span>
+      <p><%= c.body %></p>
+      <% if (user && (user.id === c.user_id || user.role === 'admin')) { %>
+        <form class="inline-form" method="post" action="/comments/<%= c.id %>/delete" data-confirm="Delete this comment?">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button class="btn sm" type="submit">Delete</button>
+        </form>
+      <% } %>
+    </div>
+  <% }) %>
+  <% if (user) { %>
+    <form class="wide" method="post" action="/articles/<%= a.id %>/comments">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label for="body">Add a comment</label>
+      <textarea id="body" name="body" rows="3" maxlength="1000" required></textarea>
+      <button class="btn" type="submit">Post comment</button>
+    </form>
+  <% } else { %>
+    <p><a href="/login">Log in</a> to comment.</p>
+  <% } %>
+<% } %>
+<%- include('partials/foot') %>

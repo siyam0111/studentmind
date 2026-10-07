@@ -1,0 +1,29 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">My articles</h1>
+<p><a class="btn" href="/write">Write a new article</a></p>
+<% if (!posts.length) { %>
+  <p class="muted">You have not submitted any articles yet.</p>
+<% } else { %>
+  <% const label = { pending: 'Pending review', published: 'Published', rejected: 'Rejected', draft: 'Unpublished' }; %>
+  <div class="card scroll">
+    <table>
+      <tr><th>Title</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+      <% posts.forEach(function (p) { %>
+        <tr>
+          <td><a href="/articles/<%= p.id %>"><%= p.title %></a>
+            <% if (p.status === 'rejected' && p.reject_reason) { %><br><small class="muted">Reason: <%= p.reject_reason %></small><% } %></td>
+          <td><%= p.type === 'external' ? 'Link' : 'Original' %></td>
+          <td><span class="tag <%= p.status %>"><%= label[p.status] %></span></td>
+          <td><%= fmtDate(p.created_at) %></td>
+          <td>
+            <form class="inline-form" method="post" action="/my-articles/<%= p.id %>/delete" data-confirm="Delete this article?">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn sm" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

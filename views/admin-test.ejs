@@ -1,0 +1,63 @@
+<%- include('partials/head', { title: title }) %>
+<p><a href="/admin/questions">&larr; All tests</a></p>
+<h1 class="h-md"><%= test.title %></h1>
+<div class="grid">
+  <div class="card">
+    <h3>Details</h3>
+    <form method="post" action="/admin/questions/<%= test.id %>/details">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label for="title">Title</label>
+      <input id="title" name="title" maxlength="150" required value="<%= test.title %>">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="3" maxlength="500" required><%= test.description %></textarea>
+      <label class="check"><input type="checkbox" name="is_published" <%= test.is_published ? 'checked' : '' %>> Published (visible to everyone)</label>
+      <button class="btn" type="submit">Save details</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3><%= editing ? 'Edit statement' : 'Add a statement' %></h3>
+    <form method="post" action="<%= editing ? '/admin/questions/' + test.id + '/q/' + editing.id + '/update' : '/admin/questions/' + test.id + '/add' %>">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label for="text">Statement</label>
+      <textarea id="text" name="text" rows="3" maxlength="300" required><%= editing ? editing.text : '' %></textarea>
+      <% if (test.kind === 'bigfive') { %>
+        <label for="trait">Trait</label>
+        <select id="trait" name="trait" required>
+          <option value="">Choose a trait</option>
+          <% Object.keys(traits).forEach(function (k) { %>
+            <option value="<%= k %>" <%= editing && editing.trait === k ? 'selected' : '' %>><%= traits[k] %></option>
+          <% }) %>
+        </select>
+      <% } %>
+      <label class="check"><input type="checkbox" name="reversed" <%= editing && editing.reversed ? 'checked' : '' %>> Reverse-scored (agreeing means a lower score)</label>
+      <button class="btn" type="submit"><%= editing ? 'Save statement' : 'Add statement' %></button>
+      <% if (editing) { %><a class="btn ghost" href="/admin/questions/<%= test.id %>">Cancel</a><% } %>
+    </form>
+    <p class="muted">Changes apply to future results only. Results people already saved keep their scores.</p>
+  </div>
+</div>
+<h2 class="spaced">Statements (<%= questions.length %>)</h2>
+<% if (!questions.length) { %>
+  <p class="muted">No statements yet.</p>
+<% } else { %>
+  <div class="card scroll">
+    <table>
+      <tr><th>#</th><th>Statement</th><% if (test.kind === 'bigfive') { %><th>Trait</th><% } %><th>Reversed</th><th>Actions</th></tr>
+      <% questions.forEach(function (q, i) { %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><%= q.text %></td>
+          <% if (test.kind === 'bigfive') { %><td><%= traits[q.trait] || '' %></td><% } %>
+          <td><%= q.reversed ? 'Yes' : 'No' %></td>
+          <td>
+            <a class="btn sm" href="/admin/questions/<%= test.id %>?edit=<%= q.id %>">Edit</a>
+            <form class="inline-form" method="post" action="/admin/questions/<%= test.id %>/q/<%= q.id %>/delete" data-confirm="Delete this statement?">
+              <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn sm" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

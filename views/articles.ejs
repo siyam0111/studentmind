@@ -1,0 +1,31 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Learn</h1>
+<form class="search" method="get" action="/articles">
+  <label for="q" class="sr">Search articles</label>
+  <input id="q" name="q" type="search" placeholder="Search articles" maxlength="100" value="<%= q %>">
+  <% if (cat) { %><input type="hidden" name="cat" value="<%= cat %>"><% } %>
+  <button class="btn ghost" type="submit">Search</button>
+</form>
+<div class="chips">
+  <a class="chip <%= !cat ? 'on' : '' %>" href="/articles<%= q ? '?q=' + encodeURIComponent(q) : '' %>">All</a>
+  <% categories.forEach(function (c) { %>
+    <a class="chip <%= cat === c.id ? 'on' : '' %>" href="/articles?cat=<%= c.id %><%= q ? '&q=' + encodeURIComponent(q) : '' %>"><%= c.name %></a>
+  <% }) %>
+</div>
+<% if (!posts.length) { %>
+  <p>No articles match. Try another word or category.</p>
+<% } else { %>
+  <div class="grid">
+    <% posts.forEach(function (p) { %>
+      <div class="card">
+        <span class="tag"><%= p.category || 'General' %></span>
+        <% if (p.type === 'external') { %><span class="tag">Source: <%= p.source_name %></span><% } %>
+        <h3 class="spaced-sm"><%= p.title %></h3>
+        <p><%= p.summary %></p>
+        <p class="muted">By <%= p.author %> · <%= fmtDate(p.created_at) %></p>
+        <a class="btn ghost" href="/articles/<%= p.id %>">Read</a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

@@ -1,0 +1,26 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Messages</h1>
+<% if (!messages.length) { %>
+  <div class="card"><p>No messages yet.</p></div>
+<% } else { %>
+  <div class="stack">
+    <% messages.forEach(function (m) { %>
+      <div class="card msg <%= m.is_read ? '' : 'unread' %>">
+        <p><strong><%= m.name || 'Anonymous' %></strong>
+          <% if (m.email) { %>· <a href="mailto:<%= m.email %>"><%= m.email %></a><% } %>
+          <span class="muted"> · <%= fmtDate(m.created_at) %></span>
+          <% if (!m.is_read) { %><span class="tag ok">New</span><% } %></p>
+        <p class="prose"><%= m.message %></p>
+        <% if (!m.is_read) { %>
+          <form class="inline-form" method="post" action="/admin/messages/<%= m.id %>/read">
+            <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn sm" type="submit">Mark as read</button>
+          </form>
+        <% } %>
+        <form class="inline-form" method="post" action="/admin/messages/<%= m.id %>/delete" data-confirm="Delete this message?">
+          <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn sm" type="submit">Delete</button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

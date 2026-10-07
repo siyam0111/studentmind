@@ -9,13 +9,25 @@ const YEARS = ['', 'Not a student', '1st', '2nd', '3rd', '4th'];
 
 router.get('/dashboard', requireLogin, async (req, res, next) => {
   try {
-    const r = await db.query(
+    const results = await db.query(
       `SELECT r.id, r.scores, r.summary, r.created_at, t.title
          FROM results r JOIN tests t ON t.id = r.test_id
         WHERE r.user_id = $1 ORDER BY r.created_at DESC LIMIT 50`,
       [req.user.id]
     );
-    res.render('dashboard', { title: 'Dashboard', results: r.rows });
+    const saved = await db.query(
+      `SELECT p.id, p.title FROM bookmarks b JOIN posts p ON p.id = b.post_id
+        WHERE b.user_id = $1 AND p.status = 'published' ORDER BY p.created_at DESC LIMIT 20`,
+      [req.user.id]
+    );
+    const counts = await db.query(
+      `SELECT COUNT(*) FILTER (WHERE status = 'pending')::int AS pending,
+              COUNT(*) FILTER (WHERE status = 'published')::int AS published,
+              COUNT(*) FILTER (WHERE status = 'rejected')::int AS rejected
+         FROM posts WHERE author_id = $1`,
+      [req.user.id]
+    );
+    res.render('dashboard', { title: 'Dashboard', results: results.rows, saved: saved.rows, counts: counts.rows[0] });
   } catch (err) {
     next(err);
   }
@@ -65,7 +77,8 @@ router.get('/admin', requireAdmin, async (req, res, next) => {
     const r = await db.query(`SELECT
       (SELECT COUNT(*) FROM users) AS users,
       (SELECT COUNT(*) FROM results) AS results,
-      (SELECT COUNT(*) FROM posts WHERE status = 'pending') AS pending`);
+      (SELECT COUNT(*) FROM posts WHERE status = 'pending') AS pending,
+      (SELECT COUNT(*) FROM contact_messages WHERE NOT is_read) AS unread`);
     res.render('admin', { title: 'Admin', stats: r.rows[0] });
   } catch (err) {
     next(err);

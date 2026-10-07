@@ -1,0 +1,47 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md"><%= heading %></h1>
+<p class="muted"><%= note %></p>
+<div class="card wide">
+  <% if (errors.length) { %>
+    <div class="flash error" role="alert"><ul><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul></div>
+  <% } %>
+  <form method="post" action="<%= action %>">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <% if (lockType) { %>
+      <p><span class="tag"><%= form.type === 'external' ? 'Link to an existing article' : 'Original article' %></span></p>
+      <input type="hidden" name="type" value="<%= form.type %>">
+    <% } else { %>
+      <label for="type">Type</label>
+      <select id="type" name="type" data-type-toggle>
+        <option value="original" <%= form.type === 'original' ? 'selected' : '' %>>Original article</option>
+        <option value="external" <%= form.type === 'external' ? 'selected' : '' %>>Link to an existing article</option>
+      </select>
+    <% } %>
+    <label for="title">Title</label>
+    <input id="title" name="title" maxlength="200" required value="<%= form.title || '' %>">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required>
+      <option value="">Choose a category</option>
+      <% categories.forEach(function (c) { %>
+        <option value="<%= c.id %>" <%= Number(form.category_id) === c.id ? 'selected' : '' %>><%= c.name %></option>
+      <% }) %>
+    </select>
+    <label for="summary">Short summary (10 to 300 characters)</label>
+    <input id="summary" name="summary" maxlength="300" required value="<%= form.summary || '' %>">
+
+    <div data-type="original" <%= form.type !== 'original' ? 'hidden' : '' %>>
+      <label for="body">Article text</label>
+      <textarea id="body" name="body" rows="12" maxlength="20000"><%= form.body || '' %></textarea>
+    </div>
+    <div data-type="external" <%= form.type !== 'external' ? 'hidden' : '' %>>
+      <label for="source_name">Source name</label>
+      <input id="source_name" name="source_name" maxlength="150" value="<%= form.source_name || '' %>" placeholder="e.g. a university or journal">
+      <label for="source_url">Link to the article</label>
+      <input id="source_url" name="source_url" type="url" maxlength="2000" value="<%= form.source_url || '' %>" placeholder="https://">
+      <p class="muted">Write the summary in your own words and credit the source. Do not paste the full text.</p>
+    </div>
+    <button class="btn" type="submit"><%= submitLabel %></button>
+    <a class="btn ghost" href="<%= cancelHref %>">Cancel</a>
+  </form>
+</div>
+<%- include('partials/foot') %>

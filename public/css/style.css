@@ -45,3 +45,35 @@ progress,meter{width:100%;height:14px}
 .result-row{margin:14px 0}
 .wide{max-width:640px}
 .row-link{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.prose{white-space:pre-line;max-width:65ch;margin:1em 0}
+.lead{font-size:1.15rem}
+.inline-form{display:inline}
+button.btn{font-family:inherit}
+.btn.sm{padding:3px 10px;box-shadow:none;font-size:.85rem}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.chip{border:1.5px solid var(--ink);color:var(--ink);padding:4px 12px;border-radius:20px;text-decoration:none}
+.chip.on{background:var(--ink);color:var(--bg)}
+.search{display:flex;gap:8px;max-width:520px}.search input{margin:0}
+.comment{border-bottom:1px solid var(--line);padding:10px 0}
+.tag.ok{border-color:var(--teal);color:var(--teal)}.tag.wait{border-color:var(--hi);color:var(--ink)}.tag.no{border-color:var(--bad);color:var(--bad)}
+details{margin:8px 0}summary{cursor:pointer;color:var(--teal);font-weight:600}
+[hidden]{display:none!important}
+form.inline{display:inline}
+.btn.small{padding:3px 10px;font-size:.85rem;box-shadow:none}
+.filters{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:20px}
+.filters>div{flex:1;min-width:180px}
+.article-body{white-space:pre-line;max-width:68ch;margin-bottom:20px}
+.tag.pending{border-color:var(--hi);color:var(--ink)}
+.tag.published{border-color:var(--teal);color:var(--teal)}
+.tag.rejected{border-color:var(--bad);color:var(--bad)}
+details.inline-details{display:inline-block;margin-left:10px}
+.sr{position:absolute;left:-9999px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.search input{flex:1}
+.tag.draft{border-color:var(--mute)}
+.review-form input{margin:8px 0}
+input[type=checkbox]{width:auto;margin:0 8px 0 0}
+.check{display:flex;align-items:center;font-weight:500;margin:6px 0 12px}
+.msg{border-left:4px solid var(--line)}.msg.unread{border-left-color:var(--teal)}
+.stack>*+*{margin-top:12px}

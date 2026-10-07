@@ -1,0 +1,33 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Review queue</h1>
+<p class="muted">Approve to publish on the Learn page, or reject with a reason the author will see.</p>
+<% if (!posts.length) { %>
+  <div class="card"><p>No articles are waiting for review.</p></div>
+<% } else { %>
+  <div class="grid">
+    <% posts.forEach(function (p) { %>
+      <div class="card">
+        <span class="tag"><%= p.category || 'General' %></span>
+        <span class="tag"><%= p.type === 'external' ? 'External link' : 'Original' %></span>
+        <h3 class="spaced-sm"><%= p.title %></h3>
+        <p class="muted">By <%= p.author %> · <%= fmtDate(p.created_at) %></p>
+        <p><%= p.summary %></p>
+        <p>
+          <a href="/articles/<%= p.id %>">Preview</a>
+          <% if (p.type === 'external') { %> · <a href="<%= p.source_url %>" target="_blank" rel="noopener noreferrer">Open source (<%= p.source_name %>)</a><% } %>
+        </p>
+        <form class="inline-form" method="post" action="/admin/articles/<%= p.id %>/approve">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button class="btn" type="submit">Approve</button>
+        </form>
+        <form class="review-form" method="post" action="/admin/articles/<%= p.id %>/reject">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label for="reason<%= p.id %>" class="sr">Reason for rejecting</label>
+          <input id="reason<%= p.id %>" name="reason" maxlength="500" placeholder="Reason, if rejecting">
+          <button class="btn ghost" type="submit">Reject</button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

@@ -13,15 +13,16 @@
 <%
   const visitorLinks = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write article'], ['/about', 'About'], ['/contact', 'Contact'], ['/login', 'Log in']];
   const memberLinks  = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write article'], ['/my-articles', 'My articles'], ['/dashboard', 'Dashboard'], ['/profile', 'Profile'], ['/logout', 'Log out']];
-  const adminLinks   = [['/admin', 'Admin'], ['/admin/review', 'Review queue'], ['/admin/questions', 'Questions'], ['/admin/articles', 'Articles'], ['/articles', 'Learn'], ['/logout', 'Log out']];
+  const adminLinks   = [['/admin', 'Admin'], ['/admin/review', 'Review queue'], ['/admin/questions', 'Questions'], ['/admin/articles', 'Articles'], ['/admin/messages', 'Messages'], ['/articles', 'Learn'], ['/dashboard', 'My results'], ['/logout', 'Log out']];
   const links = !locals.user ? visitorLinks : (locals.user.role === 'admin' ? adminLinks : memberLinks);
+  const active = links.map(function (l) { return l[0]; }).filter(function (p) { return locals.path === p || (p !== '/' && (locals.path || '').startsWith(p + '/')); }).sort(function (a, b) { return b.length - a.length; })[0];
 %>
 <header>
   <div class="bar">
     <a class="logo" href="/">StudentMind</a>
     <nav aria-label="Main">
       <% links.forEach(function (l) { %>
-        <a href="<%= l[0] %>" class="<%= locals.path === l[0] ? 'on' : '' %>"><%= l[1] %></a>
+        <a href="<%= l[0] %>" class="<%= l[0] === active ? 'on' : '' %>"><%= l[1] %></a>
       <% }) %>
     </nav>
   </div>

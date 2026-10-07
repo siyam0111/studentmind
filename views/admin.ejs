@@ -4,6 +4,8 @@
   <div class="card"><div class="stat"><%= stats.users %></div>registered users</div>
   <div class="card"><div class="stat"><%= stats.results %></div>test results saved</div>
   <div class="card"><div class="stat"><%= stats.pending %></div>articles awaiting review</div>
+  <div class="card"><div class="stat"><%= stats.unread %></div>unread messages</div>
 </div>
-<p class="muted">These numbers are read from the database. Review queue, questions and article tools are added in the next steps.</p>
+<p><a class="btn" href="/admin/review">Open review queue</a></p>
+<p class="muted">These numbers are read from the database. Question and article management pages are added in the next step.</p>
 <%- include('partials/foot') %>

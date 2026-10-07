@@ -1,0 +1,33 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Articles</h1>
+<p><a class="btn" href="/admin/articles/new">New article</a></p>
+<% const label = { pending: 'Pending review', published: 'Published', rejected: 'Rejected', draft: 'Unpublished' }; %>
+<div class="card scroll">
+  <table>
+    <tr><th>Title</th><th>Author</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+    <% posts.forEach(function (p) { %>
+      <tr>
+        <td><a href="/articles/<%= p.id %>"><%= p.title %></a></td>
+        <td><%= p.author %></td>
+        <td><%= p.type === 'external' ? 'Link' : 'Original' %></td>
+        <td><span class="tag <%= p.status %>"><%= label[p.status] %></span></td>
+        <td>
+          <a class="btn sm" href="/admin/articles/<%= p.id %>/edit">Edit</a>
+          <% if (p.status === 'published') { %>
+            <form class="inline-form" method="post" action="/admin/articles/<%= p.id %>/unpublish">
+              <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn sm" type="submit">Unpublish</button>
+            </form>
+          <% } else { %>
+            <form class="inline-form" method="post" action="/admin/articles/<%= p.id %>/approve">
+              <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="next" value="/admin/articles"><button class="btn sm" type="submit">Publish</button>
+            </form>
+          <% } %>
+          <form class="inline-form" method="post" action="/admin/articles/<%= p.id %>/delete" data-confirm="Delete this article and its comments?">
+            <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="next" value="/admin/articles"><button class="btn sm" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</div>
+<%- include('partials/foot') %>

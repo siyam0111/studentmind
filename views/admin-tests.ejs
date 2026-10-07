@@ -1,0 +1,33 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Tests and questions</h1>
+<div class="card scroll">
+  <table>
+    <tr><th>Test</th><th>Type</th><th>Statements</th><th>Status</th><th>Actions</th></tr>
+    <% tests.forEach(function (t) { %>
+      <tr>
+        <td><%= t.title %></td>
+        <td><%= t.kind === 'bigfive' ? 'Big Five' : 'Scale' %></td>
+        <td><%= t.n %></td>
+        <td><span class="tag <%= t.is_published ? 'published' : 'draft' %>"><%= t.is_published ? 'Published' : 'Hidden' %></span></td>
+        <td>
+          <a class="btn sm" href="/admin/questions/<%= t.id %>">Manage</a>
+          <form class="inline-form" method="post" action="/admin/questions/<%= t.id %>/delete" data-confirm="Delete this test, its statements and everyone's saved results for it?">
+            <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn sm" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</div>
+<h2 class="spaced">Add a test</h2>
+<div class="card form-card">
+  <form method="post" action="/admin/questions">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <label for="title">Title</label>
+    <input id="title" name="title" maxlength="150" required>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3" maxlength="500" required></textarea>
+    <button class="btn" type="submit">Create test</button>
+  </form>
+</div>
+<%- include('partials/foot') %>

@@ -49,6 +49,8 @@ app.use((req, res, next) => {
   res.locals.flash = req.session.flash || null;
   delete req.session.flash;
   res.locals.path = req.path;
+  res.locals.fmtDate = (d) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  res.locals.fmt = (d) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   if (!req.session.csrf) req.session.csrf = crypto.randomBytes(24).toString('hex');
   res.locals.csrf = req.session.csrf;
   if (req.method === 'POST' && req.body._csrf !== req.session.csrf) {
@@ -88,6 +90,10 @@ app.get('/health', async (req, res) => {
 
 app.use(require('./routes/auth'));
 app.use(require('./routes/tests'));
+app.use(require('./routes/articles'));
+app.use(require('./routes/admin'));
+app.use(require('./routes/admin-tests'));
+app.use(require('./routes/pages'));
 app.use(require('./routes/account'));
 
 app.use((req, res) => {
