@@ -1,0 +1,29 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Create your account</h1>
+<div class="card form-card">
+  <% if (errors.length) { %>
+    <div class="flash error" role="alert"><ul><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul></div>
+  <% } %>
+  <form method="post" action="/register">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <label for="name">Full name</label>
+    <input id="name" name="name" required maxlength="100" autocomplete="name" value="<%= form.name || '' %>">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" required maxlength="255" autocomplete="email" value="<%= form.email || '' %>">
+    <label for="department">Department (optional)</label>
+    <input id="department" name="department" maxlength="100" value="<%= form.department || '' %>">
+    <label for="year">Year (optional)</label>
+    <select id="year" name="year">
+      <% ['', 'Not a student', '1st', '2nd', '3rd', '4th'].forEach(function (y) { %>
+        <option value="<%= y %>" <%= form.year === y ? 'selected' : '' %>><%= y || 'Choose' %></option>
+      <% }) %>
+    </select>
+    <label for="password">Password (8 or more characters)</label>
+    <input id="password" name="password" type="password" required minlength="8" maxlength="72" autocomplete="new-password">
+    <label for="confirm">Confirm password</label>
+    <input id="confirm" name="confirm" type="password" required minlength="8" maxlength="72" autocomplete="new-password">
+    <button class="btn" type="submit">Create account</button>
+  </form>
+  <p class="muted">Already registered? <a href="/login">Log in</a></p>
+</div>
+<%- include('partials/foot') %>

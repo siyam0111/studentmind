@@ -1,0 +1,27 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">My profile</h1>
+<div class="card form-card">
+  <% if (errors.length) { %>
+    <div class="flash error" role="alert"><ul><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul></div>
+  <% } %>
+  <form method="post" action="/profile">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <label for="name">Full name</label>
+    <input id="name" name="name" required maxlength="100" value="<%= form.name || '' %>">
+    <label for="department">Department (optional)</label>
+    <input id="department" name="department" maxlength="100" value="<%= form.department || '' %>">
+    <label for="year">Year (optional)</label>
+    <select id="year" name="year">
+      <% ['', 'Not a student', '1st', '2nd', '3rd', '4th'].forEach(function (y) { %>
+        <option value="<%= y %>" <%= (form.year || '') === y ? 'selected' : '' %>><%= y || 'Choose' %></option>
+      <% }) %>
+    </select>
+    <h3>Change password (optional)</h3>
+    <label for="current_password">Current password</label>
+    <input id="current_password" name="current_password" type="password" autocomplete="current-password">
+    <label for="new_password">New password</label>
+    <input id="new_password" name="new_password" type="password" maxlength="72" autocomplete="new-password">
+    <button class="btn" type="submit">Save changes</button>
+  </form>
+</div>
+<%- include('partials/foot') %>

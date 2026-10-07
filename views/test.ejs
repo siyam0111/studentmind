@@ -1,0 +1,24 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md"><%= test.title %></h1>
+<p><%= test.description %></p>
+<p class="muted">Answer how you usually are, not how you want to be. 1 means strongly disagree and 5 means strongly agree.</p>
+<% if (!user) { %><p class="muted">You are not logged in, so this result will not be saved. <a href="/login">Log in</a> first if you want to keep it.</p><% } %>
+<% if (error) { %><div class="flash error" role="alert"><%= error %></div><% } %>
+<form class="wide" method="post" action="/tests/<%= test.slug %>" data-progress>
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <progress max="<%= questions.length %>" value="0"></progress>
+  <p class="muted prog-text">0 of <%= questions.length %> answered</p>
+  <% questions.forEach(function (q, i) { %>
+    <fieldset class="likert-q">
+      <legend><%= i + 1 %>. <%= q.text %></legend>
+      <div class="likert-ends"><span>Strongly disagree</span><span>Strongly agree</span></div>
+      <div class="likert">
+        <% [1, 2, 3, 4, 5].forEach(function (n) { %>
+          <label><input type="radio" name="q_<%= q.id %>" value="<%= n %>" <%= answers[q.id] === n ? 'checked' : '' %> required><%= n %></label>
+        <% }) %>
+      </div>
+    </fieldset>
+  <% }) %>
+  <button class="btn" type="submit">See my result</button>
+</form>
+<%- include('partials/foot') %>

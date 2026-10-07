@@ -1,0 +1,15 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Tests</h1>
+<p class="muted">Each result comes with study tips. You can take a test without an account, but only members can save results.</p>
+<div class="grid">
+  <% tests.forEach(function (t) { %>
+    <div class="card">
+      <h3><%= t.title %></h3>
+      <p><%= t.description %></p>
+      <span class="tag"><%= t.n %> statements</span>
+      <p></p>
+      <% if (t.n > 0) { %><a class="btn ghost" href="/tests/<%= t.slug %>">Start test</a><% } else { %><span class="muted">Coming soon</span><% } %>
+    </div>
+  <% }) %>
+</div>
+<%- include('partials/foot') %>

@@ -1,0 +1,38 @@
+<%- include('partials/head', { title: 'Home' }) %>
+<section class="hero">
+  <div>
+    <h1>Know how you study. Then study better.</h1>
+    <p>Short psychology tests for students, with practical tips for every result and a library of plain-language articles.</p>
+    <a class="btn" href="/tests">Browse tests</a>
+    <a class="btn ghost" href="/articles">Read articles</a>
+  </div>
+</section>
+
+<h2>Tests</h2>
+<div class="grid">
+  <% tests.forEach(function (t) { %>
+    <div class="card">
+      <h3><%= t.title %></h3>
+      <p><%= t.description %></p>
+      <a class="btn ghost" href="/tests/<%= t.slug %>">View test</a>
+    </div>
+  <% }) %>
+</div>
+
+<h2 class="spaced">Latest articles</h2>
+<% if (posts.length === 0) { %>
+  <p>No articles have been published yet.</p>
+<% } else { %>
+  <div class="grid">
+    <% posts.forEach(function (p) { %>
+      <div class="card">
+        <span class="tag"><%= p.category || 'General' %></span>
+        <% if (p.type === 'external') { %><span class="tag">Source: <%= p.source_name %></span><% } %>
+        <h3 class="spaced-sm"><%= p.title %></h3>
+        <p><%= p.summary %></p>
+        <a class="btn ghost" href="/articles/<%= p.id %>">Read</a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('partials/foot') %>

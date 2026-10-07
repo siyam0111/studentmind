@@ -1,0 +1,24 @@
+<%- include('partials/head', { title: model.title + ' result' }) %>
+<h1 class="h-md"><%= model.title %></h1>
+<div class="card wide">
+  <span class="tag">Your result</span><% if (date) { %><span class="tag"><%= date %></span><% } %>
+  <h2><%= model.headline %></h2>
+  <% model.bars.forEach(function (b) { %>
+    <div class="result-row">
+      <label><%= b.label %>: <strong><%= b.pct %>%</strong></label>
+      <meter min="0" max="100" value="<%= b.pct %>"></meter>
+      <p class="muted"><%= b.tip %></p>
+    </div>
+  <% }) %>
+  <% if (model.support) { %>
+    <p>If exam pressure is affecting your sleep, health or studies, please talk to a university counselor or a doctor.</p>
+  <% } %>
+  <p class="muted"><%= model.note %> For self-awareness only. This is not a diagnosis.</p>
+  <% if (!saved) { %>
+    <p><strong>This result is not saved.</strong> <a href="/login">Log in</a> or <a href="/register">create an account</a> to save results and track your progress.</p>
+  <% } else { %>
+    <a class="btn" href="/dashboard">Back to dashboard</a>
+  <% } %>
+  <a class="btn ghost" href="/tests/<%= slug %>">Retake</a>
+</div>
+<%- include('partials/foot') %>

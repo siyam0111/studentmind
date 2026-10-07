@@ -1,0 +1,28 @@
+{
+  "name": "studentmind",
+  "version": "1.0.0",
+  "description": "Psychology tests and learning platform for students",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:init": "node scripts/init-db.js",
+    "create-admin": "node scripts/create-admin.js",
+    "db:seed": "node scripts/seed-questions.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.5.1",
+    "express-session": "^1.19.0",
+    "helmet": "^7.2.0",
+    "pg": "^8.12.0"
+  }
+}

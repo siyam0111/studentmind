@@ -1,0 +1,28 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Hello, <%= user.name %></h1>
+<div class="grid">
+  <div class="card">
+    <h3>Your results</h3>
+    <% if (!results.length) { %>
+      <p class="muted">You have not saved any results yet.</p>
+      <a class="btn ghost" href="/tests">Browse tests</a>
+    <% } else { %>
+      <% results.forEach(function (r) { %>
+        <div class="row-link">
+          <div>
+            <strong><%= r.title %></strong><br>
+            <span class="muted"><%= r.summary %> · <%= new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+          </div>
+          <a href="/results/<%= r.id %>">View</a>
+        </div>
+      <% }) %>
+      <p></p><a class="btn ghost" href="/tests">Take another test</a>
+    <% } %>
+  </div>
+  <div class="card">
+    <h3>Your articles</h3>
+    <p class="muted">Articles you write and their review status will appear here.</p>
+    <a class="btn ghost" href="/write">Write an article</a>
+  </div>
+</div>
+<%- include('partials/foot') %>

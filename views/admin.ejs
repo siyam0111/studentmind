@@ -1,0 +1,9 @@
+<%- include('partials/head', { title: title }) %>
+<h1 class="h-md">Admin</h1>
+<div class="grid">
+  <div class="card"><div class="stat"><%= stats.users %></div>registered users</div>
+  <div class="card"><div class="stat"><%= stats.results %></div>test results saved</div>
+  <div class="card"><div class="stat"><%= stats.pending %></div>articles awaiting review</div>
+</div>
+<p class="muted">These numbers are read from the database. Review queue, questions and article tools are added in the next steps.</p>
+<%- include('partials/foot') %>
