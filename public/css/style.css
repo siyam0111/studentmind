@@ -50,7 +50,7 @@ img { max-width: 100%; height: auto; }
 .site-header { position: sticky; top: 0; z-index: 50; background: var(--bg); border-bottom: 1px solid var(--line); }
 .bar { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: var(--header-h); padding: 10px var(--pad); }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 800 1.35rem "Bricolage Grotesque", system-ui, sans-serif; letter-spacing: -.02em; flex: none; }
-.brand span { color: var(--primary); }
+.brand-name span { color: var(--primary); }
 .brand-badge { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 12px; background: #f4f7f7; border: 1px solid var(--line); transition: transform .2s ease, border-color .2s ease; }
 .brand-badge img { width: 34px; height: 34px; object-fit: contain; }
 .brand:hover .brand-badge { transform: translateY(-1px); border-color: var(--primary); }
