@@ -3,31 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c22">
   <title><%= typeof title !== 'undefined' ? title + ' | StudentMind' : 'StudentMind' %></title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/js-flag.js"></script>
 </head>
 <body>
 <%
-  const visitorLinks = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write article'], ['/about', 'About'], ['/contact', 'Contact'], ['/login', 'Log in']];
-  const memberLinks  = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write article'], ['/my-articles', 'My articles'], ['/dashboard', 'Dashboard'], ['/profile', 'Profile'], ['/logout', 'Log out']];
-  const adminLinks   = [['/admin', 'Admin'], ['/admin/review', 'Review queue'], ['/admin/questions', 'Questions'], ['/admin/articles', 'Articles'], ['/admin/messages', 'Messages'], ['/articles', 'Learn'], ['/dashboard', 'My results'], ['/logout', 'Log out']];
+  const visitorLinks = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write Article'], ['/about', 'About'], ['/contact', 'Contact'], ['/login', 'Log In']];
+  const memberLinks  = [['/', 'Home'], ['/tests', 'Tests'], ['/articles', 'Learn'], ['/write', 'Write Article'], ['/my-articles', 'My Articles'], ['/dashboard', 'Dashboard'], ['/profile', 'Profile'], ['/logout', 'Log Out']];
+  const adminLinks   = [['/admin', 'Admin'], ['/admin/review', 'Review Queue'], ['/admin/questions', 'Questions'], ['/admin/articles', 'Articles'], ['/admin/messages', 'Messages'], ['/articles', 'Learn'], ['/dashboard', 'My Results'], ['/logout', 'Log Out']];
   const links = !locals.user ? visitorLinks : (locals.user.role === 'admin' ? adminLinks : memberLinks);
-  const active = links.map(function (l) { return l[0]; }).filter(function (p) { return locals.path === p || (p !== '/' && (locals.path || '').startsWith(p + '/')); }).sort(function (a, b) { return b.length - a.length; })[0];
+  const here = locals.path || '/';
+  const isActive = function (href) {
+    if (href === '/') return here === '/';
+    return here === href || (href !== '/admin' && here.indexOf(href + '/') === 0);
+  };
 %>
-<header>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
   <div class="bar">
-    <a class="logo" href="/">StudentMind</a>
-    <nav aria-label="Main">
+    <a class="brand" href="/">
+      <span class="brand-badge"><img src="/images/logo-mark.png" alt="" width="34" height="34"></span>
+      <span>Student<span>Mind</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-nav" class="nav-links" aria-label="Main">
       <% links.forEach(function (l) { %>
-        <a href="<%= l[0] %>" class="<%= l[0] === active ? 'on' : '' %>"><%= l[1] %></a>
+        <a href="<%= l[0] %>" class="<%= isActive(l[0]) ? 'on' : '' %>"<%- isActive(l[0]) ? ' aria-current="page"' : '' %>><%= l[1] %></a>
       <% }) %>
     </nav>
   </div>
 </header>
-<main>
+<main id="main">
 <% if (typeof flash !== 'undefined' && flash) { %>
   <div class="flash <%= flash.type %>" role="status"><%= flash.text %></div>
 <% } %>

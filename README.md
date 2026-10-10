@@ -4,7 +4,7 @@ A psychology website for university students. Visitors and members take short se
 
 Built for the Web Application Development lab final project.
 
-**Live site:** https://studentmind.onrender.com
+**Live site:** _add your Render link here_
 
 > StudentMind is for education and self-awareness. It does not diagnose or treat any condition.
 
